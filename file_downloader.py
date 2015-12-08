@@ -140,18 +140,24 @@ def main(args):
     example: python file_downloader.py "http://lipsum.com/" "Lorem Ipsum" "stuff and things"
     """
 
+    # parse input variables
     url, search_str, replace_str, file_name = parse_inputs(args)
 
     log.debug('url: {0}'.format(url))
     log.debug('search string: {0}'.format(search_str))
     log.debug('replace string: {0}'.format(replace_str))
 
+    # download html
     page = get_page(url)
 
     log.debug('page html:\n{0}'.format(page))
 
+    # parse page and replace strings
+    parsed_page = process_page(page, search_str, replace_str)
+
+    # write to file
     with open(file_name, 'w') as f:
-        f.write(process_page(page, search_str, replace_str))
+        f.write(parsed_page)
 
     log.info('Results written to {0}'.format(file_name))
 
